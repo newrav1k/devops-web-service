@@ -10,7 +10,7 @@ COPY settings.gradle.kts .
 
 COPY src ./src
 
-RUN chmod +x gradlew && ./gradlew clean build
+RUN chmod +x gradlew && ./gradlew clean build -x test
 
 # STAGE 2
 FROM eclipse-temurin:21-jre

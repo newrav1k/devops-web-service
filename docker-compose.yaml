@@ -1,0 +1,28 @@
+services:
+  web-db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: web-db
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web-service:
+    build: .
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://web-db:5432/web-db
+      SPRING_DATASOURCE_USERNAME: ${DATABASE_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
+#      SPRING_PROFILES_ACTIVE:
+    depends_on:
+      - web-db
+    ports:
+      - "8080:8080"
+
+volumes:
+  pg_data:
